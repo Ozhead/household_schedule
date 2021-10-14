@@ -2,22 +2,22 @@
 start
 :update schedule;
 
-if ("schedule empty?") then (yes)
+if (schedule empty?) then (yes)
   :notify user with empty schedule;
 else (no)
   :send user the respective task;
   :ask user if he did the task;
 
-  if ("user did task?") then (yes)
+  if (user did task?) then (yes)
     :remove task from queue/schedule;
   else (no)
-
-    if ("debt-free mode?") (yes)
+  
+    if (debt-free mode?) then (yes)
     else (no)
       :move time forward;
       :merge tasks that reached the deadline;
     endif
-    
+
   endif
 
 endif
