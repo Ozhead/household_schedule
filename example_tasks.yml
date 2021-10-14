@@ -1,0 +1,4 @@
+- name: Vacuum living room
+  periodicity: 5
+- name: Clean bathroom
+  periodicity: 10
