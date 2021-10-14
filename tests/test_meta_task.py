@@ -1,4 +1,5 @@
-from meta_task import *
+from meta_task import MetaTask
+
 
 def test_meta_task_ctor():
     mt = MetaTask("Test", 1)

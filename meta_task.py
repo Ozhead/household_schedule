@@ -5,8 +5,8 @@ class MetaTask:
         self._periodicity = periodicity
 
     # getter methods
-    def get_name(self):
+    def get_name(self) -> str:
         return self._name
-    
-    def get_period(self):
+
+    def get_period(self) -> int:
         return self._periodicity
