@@ -9,4 +9,4 @@ class MetaTask:
         return self._name
     
     def get_period(self):
-        return self._period
+        return self._periodicity
