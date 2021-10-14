@@ -1,5 +1,0 @@
-@startuml activity
-start
-:Hello world;
-stop
-@enduml

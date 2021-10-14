@@ -1,0 +1,5 @@
+@startuml daily workflow
+start
+:TBD;
+stop
+@enduml
