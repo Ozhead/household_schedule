@@ -1,5 +1,5 @@
 class MetaTask:
-    NUM_PROPERTIES: int = 2
+    REQUIRED_PROPERTIES: list = ["name", "periodicity"]
 
     def __init__(self, name: str, periodicity: int):
         # constants

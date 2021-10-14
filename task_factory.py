@@ -12,10 +12,6 @@ class MissingProperty(Exception):
         return self.message
 
 
-prop_name: str = "name"
-prop_period: str = "periodicity"
-
-
 class TaskFactory:
     @staticmethod
     def create_meta_tasks(file: str) -> list:
@@ -25,20 +21,18 @@ class TaskFactory:
             logging.debug(data)
 
         for d in data:
-            if prop_name not in d.keys():
-                raise MissingProperty(d, prop_name)
+            # check that all required properties are available!
+            for prop in MetaTask.REQUIRED_PROPERTIES:
+                if prop not in d.keys():
+                    raise MissingProperty(d, prop)
 
-            if prop_period not in d.keys():
-                raise MissingProperty(d, prop_period)
-
-            if len(d.keys()) > MetaTask.NUM_PROPERTIES:
+            if len(d.keys()) > len(MetaTask.REQUIRED_PROPERTIES):
                 print("WARNING: Entry '" + str(d) + "' has more than " +
-                      str(MetaTask.NUM_PROPERTIES) + " properties.")
+                      str(len(MetaTask.REQUIRED_PROPERTIES)) + " properties.")
 
-            meta_tasks.append(MetaTask(d[prop_name], d[prop_period]))
+            meta_tasks.append(MetaTask(d["name"], d["periodicity"]))
         # end for
 
         return meta_tasks
 
     # end
-
