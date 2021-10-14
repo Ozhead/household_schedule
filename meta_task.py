@@ -1,5 +1,7 @@
 class MetaTask:
-    def __init__(self, name, periodicity):
+    NUM_PROPERTIES: int = 2
+
+    def __init__(self, name: str, periodicity: int):
         # constants
         self._name = name
         self._periodicity = periodicity
