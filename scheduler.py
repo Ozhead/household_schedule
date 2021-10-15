@@ -24,6 +24,9 @@ class Scheduler:
     def get_queue(self) -> List[Task]:
         return self._queue
 
+    def insert_queue(self, pos: int, t: Task):
+        self._queue.insert(pos, t)
+
     def incr_day_ctr(self):
         self._day_ctr = self._day_ctr + 1
 
@@ -33,11 +36,24 @@ class Scheduler:
         scheduled_mts = list(map(lambda x: x.get_origin(), self.get_queue()))
 
         # create a list of all MetaTasks that do not have a spawn currently
-        # in the queue via set difference
-        missing_mtasks = list(set(self.get_tasks()) - set(scheduled_mts))
+        # in the queue via difference
+        # missing_mtasks = list(set(self.get_tasks()) - set(scheduled_mts))
+        miss_mtasks = [t for t in self.get_tasks() if t not in scheduled_mts]
 
-        for missing_mtask in missing_mtasks:
+        for missing_mtask in miss_mtasks:
             self.schedule_task(missing_mtask)
 
     def schedule_task(self, mt):
-        pass
+        t = TaskFactory.create_task(mt)
+
+        pos = 0
+        q = self.get_queue()
+
+        for pos in range(len(q)):
+            # a higher deadline is encountered -> insert task exactly here
+            if q[pos].get_deadline() > t.get_deadline():
+                self.insert_queue(pos, t)
+                break
+        # nothing has been found -> insert at the end
+        else:
+            self.insert_queue(len(q), t)
