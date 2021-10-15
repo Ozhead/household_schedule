@@ -29,3 +29,19 @@ def test_scheduler_update_schedule():
     assert s.get_queue() == []
     s.update_queue()
     assert s.get_queue() == [ta, tc, tb]
+
+
+def test_scheduler_schedule_task():
+    a = MetaTask("A", 1)
+    b = MetaTask("B", 5)
+    c = MetaTask("C", 3)
+    d = MetaTask("D", 3)
+    s = Scheduler([a, b, c, d])
+    ta = TaskFactory.create_task(a)
+    tb = TaskFactory.create_task(b)
+    tc = TaskFactory.create_task(c)
+    td = TaskFactory.create_task(d)
+
+    s._queue = [ta, tc, tb]
+    s.schedule_task(d)
+    assert s.get_queue() == [ta, tc, td, tb]
