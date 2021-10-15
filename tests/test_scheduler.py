@@ -20,10 +20,12 @@ def test_scheduler_ctor():
 def test_scheduler_update_schedule():
     a = MetaTask("A", 1)
     b = MetaTask("B", 5)
-    s = Scheduler([a, b])
+    c = MetaTask("C", 3)
+    s = Scheduler([a, b, c])
     ta = TaskFactory.create_task(a)
     tb = TaskFactory.create_task(b)
+    tc = TaskFactory.create_task(c)
 
     assert s.get_queue() == []
     s.update_queue()
-    assert s.get_queue() == [ta, tb]
+    assert s.get_queue() == [ta, tc, tb]
