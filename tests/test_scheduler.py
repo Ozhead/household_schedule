@@ -17,20 +17,6 @@ def test_scheduler_ctor():
     assert s.get_tasks() == [a, b]
 
 
-def test_scheduler_update_schedule():
-    a = MetaTask("A", 1)
-    b = MetaTask("B", 5)
-    c = MetaTask("C", 3)
-    s = Scheduler([a, b, c])
-    ta = TaskFactory.create_task(a)
-    tb = TaskFactory.create_task(b)
-    tc = TaskFactory.create_task(c)
-
-    assert s.get_queue() == []
-    s.update_queue()
-    assert s.get_queue() == [ta, tc, tb]
-
-
 def test_scheduler_schedule_task():
     a = MetaTask("A", 1)
     b = MetaTask("B", 5)
@@ -42,6 +28,36 @@ def test_scheduler_schedule_task():
     tc = TaskFactory.create_task(c)
     td = TaskFactory.create_task(d)
 
-    s._queue = [ta, tc, tb]
+    s.schedule_task(a)
+    assert s.get_queue() == [ta]
+    s.schedule_task(b)
+    assert s.get_queue() == [ta, tb]
+    s.schedule_task(c)
+    assert s.get_queue() == [ta, tc, tb]
     s.schedule_task(d)
     assert s.get_queue() == [ta, tc, td, tb]
+
+
+def test_scheduler_update_schedule():
+    a = MetaTask("A", 1)
+    b = MetaTask("B", 5)
+    c = MetaTask("C", 3)
+    s = Scheduler([a, b, c])
+    ta = TaskFactory.create_task(a)
+    tb = TaskFactory.create_task(b)
+    tc = TaskFactory.create_task(c)
+
+    # empty queue
+    assert s.get_queue() == []
+    s.update_queue()
+    assert s.get_queue() == [ta, tc, tb]
+
+    # not empty queue
+    s._queue = [tb]
+    s.update_queue()
+    assert s.get_queue() == [ta, tc, tb]
+
+    # full queue
+    s._queue = [ta, tc, tb]
+    s.update_queue()
+    assert s.get_queue() == [ta, tc, tb]
