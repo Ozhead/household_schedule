@@ -24,11 +24,27 @@ class Scheduler:
     def get_queue(self) -> List[Task]:
         return self._queue
 
+    def is_queue_empty(self) -> bool:
+        return len(self.get_queue()) == 0
+
+    def get_next_task(self) -> Task:
+        if len(self.get_queue()) > 0:
+            next_task = self.get_queue()[0]
+            del self.get_queue()[0]
+            return next_task
+
+        return None
+
     def insert_queue(self, pos: int, t: Task):
         self._queue.insert(pos, t)
 
-    def incr_day_ctr(self):
+    def advance_day(self):
+        # map function is not good for side effects due to lazy evaluation
+        # -> good old for loop does the job
         self._day_ctr = self._day_ctr + 1
+
+        for x in self.get_queue():
+            x.decr_deadline()
 
     def update_queue(self):
         # first get a list of tasks that are *not* queued

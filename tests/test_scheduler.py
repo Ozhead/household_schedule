@@ -61,3 +61,31 @@ def test_scheduler_update_schedule():
     s._queue = [ta, tc, tb]
     s.update_queue()
     assert s.get_queue() == [ta, tc, tb]
+
+
+def test_scheduler_advance_day():
+    a = MetaTask("A", 2)
+    b = MetaTask("B", 3)
+    s = Scheduler([a, b])
+    s.update_queue()
+
+    assert s.get_day_ctr() == 0
+    s.advance_day()
+    assert s.get_day_ctr() == 1
+    assert s.get_queue()[0].get_deadline() == 1
+    assert s.get_queue()[1].get_deadline() == 2
+
+
+def test_scheduler_next_task():
+    a = MetaTask("A", 5)
+    b = MetaTask("B", 1)
+    s = Scheduler([a, b])
+    ta = TaskFactory.create_task(a)
+    tb = TaskFactory.create_task(b)
+
+    assert s.is_queue_empty() is True
+    s.update_queue()
+    assert s.is_queue_empty() is False
+    assert s.get_next_task() == tb
+    assert s.get_next_task() == ta
+    assert s.is_queue_empty() is True
