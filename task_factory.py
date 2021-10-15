@@ -1,6 +1,7 @@
 import yaml
 import logging
 from meta_task import MetaTask
+from task import Task
 from typing import List
 
 
@@ -35,5 +36,8 @@ class TaskFactory:
         # end for
 
         return meta_tasks
-
     # end
+
+    @staticmethod
+    def create_task(mt: MetaTask) -> Task:
+        return Task(mt)
