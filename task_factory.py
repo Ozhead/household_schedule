@@ -1,6 +1,7 @@
 import yaml
 import logging
 from meta_task import MetaTask
+from typing import List
 
 
 class MissingProperty(Exception):
@@ -14,10 +15,10 @@ class MissingProperty(Exception):
 
 class TaskFactory:
     @staticmethod
-    def create_meta_tasks(file: str) -> list:
-        meta_tasks: list = []
+    def create_meta_tasks(file: str) -> List[MetaTask]:
+        meta_tasks: List[MetaTask] = []
         with open(file) as f:
-            data: list = yaml.load(f, Loader=yaml.FullLoader)
+            data = yaml.load(f, Loader=yaml.FullLoader)
             logging.debug(data)
 
         for d in data:
