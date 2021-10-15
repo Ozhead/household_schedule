@@ -1,16 +1,5 @@
-from meta_task import MetaTask
+from meta_task import MetaTask, ElementNotMetaTaskException
 from typing import List
-
-
-class ElementNotMetaTaskException(Exception):
-    def __init__(self, elem):
-        self.message = "Element " + str(elem) + " is not of type MetaTask"
-
-    def __str__(self):
-        return self.message
-
-
-# MetaTaskList = NewType('MetaTaskList', list(MetaTask))
 
 
 class Scheduler:
