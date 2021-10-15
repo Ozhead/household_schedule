@@ -20,6 +20,13 @@ class MetaTask:
     def __repr__(self):
         return self.__str__()
 
+    def __eq__(self, other):
+        if type(other) is not MetaTask:
+            raise ElementNotMetaTaskException(other)
+
+        return (self.get_name() == other.get_name() and
+                self.get_period() == other.get_period())
+
     # getter methods
     def get_name(self) -> str:
         return self._name
