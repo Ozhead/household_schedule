@@ -4,6 +4,14 @@ from task_factory import TaskFactory
 from typing import List
 
 
+class TaskAlreadyScheduledException(Exception):
+    def __init__(self, t):
+        self.message = "Task " + str(t) + " is already in the queue."
+
+    def __str__(self):
+        return self.message
+
+
 class Scheduler:
     def __init__(self, meta_tasks: List[MetaTask]):
         for mt in meta_tasks:
@@ -56,11 +64,18 @@ class Scheduler:
         # missing_mtasks = list(set(self.get_tasks()) - set(scheduled_mts))
         miss_mtasks = [t for t in self.get_tasks() if t not in scheduled_mts]
 
+        # now filter out all meta tasks that should not be scheduled now
+        # more exactly: periodicity matches the current day!
+        miss_mtasks = list(filter(lambda x: self.get_day_ctr() % x.get_period() == 0, miss_mtasks))
+
         for missing_mtask in miss_mtasks:
             self.schedule_task(missing_mtask)
 
     def schedule_task(self, mt):
         t = TaskFactory.create_task(mt)
+
+        if t in self.get_queue():
+            raise TaskAlreadyScheduledException(t)
 
         pos = 0
         q = self.get_queue()
