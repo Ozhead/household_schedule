@@ -66,7 +66,8 @@ class Scheduler:
 
         # now filter out all meta tasks that should not be scheduled now
         # more exactly: periodicity matches the current day!
-        miss_mtasks = list(filter(lambda x: self.get_day_ctr() % x.get_period() == 0, miss_mtasks))
+        miss_mtasks = list(filter(
+            lambda x: self.get_day_ctr() % x.get_period() == 0, miss_mtasks))
 
         for missing_mtask in miss_mtasks:
             self.schedule_task(missing_mtask)

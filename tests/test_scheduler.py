@@ -135,6 +135,3 @@ def test_scheduler_periodic_scheduling():
     assert s.get_queue() == []
     s.update_queue()
     assert s.get_queue() == [tb]
-
-
-    
