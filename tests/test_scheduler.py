@@ -1,15 +1,16 @@
 import pytest
-from scheduler import Scheduler, TaskAlreadyScheduledException
+from scheduler import TaskAlreadyScheduledException
 from meta_task import ElementNotMetaTaskException
 from task_factory import TaskFactory
+from scheduler_factory import SchedulerFactory
 
 
 def test_scheduler_errors():
     with pytest.raises(ElementNotMetaTaskException):
-        Scheduler([5])
+        SchedulerFactory.create_scheduler_from_meta_tasks([5])
 
     a = TaskFactory.create_meta_task("A", 1)
-    s = Scheduler([a])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a])
     s.schedule_task(a)
 
     with pytest.raises(TaskAlreadyScheduledException):
@@ -19,7 +20,7 @@ def test_scheduler_errors():
 def test_scheduler_ctor():
     a = TaskFactory.create_meta_task("A", 1)
     b = TaskFactory.create_meta_task("B", 5)
-    s = Scheduler([a, b])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a, b])
     assert s.get_day_ctr() == 0
     assert s.get_tasks() == [a, b]
 
@@ -30,7 +31,7 @@ def test_scheduler_schedule_task():
     b = TaskFactory.create_meta_task("B", 5)
     c = TaskFactory.create_meta_task("C", 3)
     d = TaskFactory.create_meta_task("D", 3)
-    s = Scheduler([a, b, c, d])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a, b, c, d])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
     tc = TaskFactory.create_task_from_meta_task(c)
@@ -51,7 +52,7 @@ def test_scheduler_update_schedule():
     a = TaskFactory.create_meta_task("A", 1)
     b = TaskFactory.create_meta_task("B", 5)
     c = TaskFactory.create_meta_task("C", 3)
-    s = Scheduler([a, b, c])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a, b, c])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
     tc = TaskFactory.create_task_from_meta_task(c)
@@ -76,7 +77,7 @@ def test_scheduler_update_schedule():
 def test_scheduler_advance_day():
     a = TaskFactory.create_meta_task("A", 2)
     b = TaskFactory.create_meta_task("B", 3)
-    s = Scheduler([a, b])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a, b])
     s.update_queue()
 
     assert s.get_day_ctr() == 0
@@ -90,7 +91,7 @@ def test_scheduler_advance_day():
 def test_scheduler_next_task():
     a = TaskFactory.create_meta_task("A", 5)
     b = TaskFactory.create_meta_task("B", 1)
-    s = Scheduler([a, b])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a, b])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
 
@@ -107,7 +108,7 @@ def test_scheduler_next_task():
 def test_scheduler_periodic_scheduling():
     a = TaskFactory.create_meta_task("A", 5)
     b = TaskFactory.create_meta_task("B", 3)
-    s = Scheduler([a, b])
+    s = SchedulerFactory.create_scheduler_from_meta_tasks([a, b])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
 
