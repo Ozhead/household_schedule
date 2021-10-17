@@ -84,10 +84,14 @@ class TelegramHandler:
         pr: profile.Profile = None
         for pr in self._profiles:
             if pr.get_name() == logon_name:
-                pr.logon(update.effective_chat.id)
-                update.message.reply_text(text="Logon succesful.")
-                pr.update()
-                break
+                if pr.get_user() is None:
+                    pr.logon(update.effective_chat.id)
+                    update.message.reply_text(text="Logon succesful.")
+                    pr.update()
+                    break
+                else:
+                    context.bot.send_message(chat_id=update.effective_chat.id,
+                                             text="This profile is already being used.")
         else:
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text="Logon not succesful.")
