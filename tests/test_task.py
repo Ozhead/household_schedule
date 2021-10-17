@@ -1,11 +1,11 @@
 from task import Task
-from meta_task import MetaTask, ElementNotMetaTaskException
+from meta_task import ElementNotMetaTaskException
 from task_factory import TaskFactory
 import pytest
 
 
 def test_task():
-    mt = MetaTask("A", 5)
+    mt = TaskFactory.create_meta_task("A", 5)
     t = TaskFactory.create_task_from_meta_task(mt)
 
     assert type(t) == Task

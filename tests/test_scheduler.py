@@ -1,6 +1,6 @@
 import pytest
 from scheduler import Scheduler, TaskAlreadyScheduledException
-from meta_task import MetaTask, ElementNotMetaTaskException
+from meta_task import ElementNotMetaTaskException
 from task_factory import TaskFactory
 
 
@@ -8,7 +8,7 @@ def test_scheduler_errors():
     with pytest.raises(ElementNotMetaTaskException):
         Scheduler([5])
 
-    a = MetaTask("A", 1)
+    a = TaskFactory.create_meta_task("A", 1)
     s = Scheduler([a])
     s.schedule_task(a)
 
@@ -17,8 +17,8 @@ def test_scheduler_errors():
 
 
 def test_scheduler_ctor():
-    a = MetaTask("A", 1)
-    b = MetaTask("B", 5)
+    a = TaskFactory.create_meta_task("A", 1)
+    b = TaskFactory.create_meta_task("B", 5)
     s = Scheduler([a, b])
     assert s.get_day_ctr() == 0
     assert s.get_tasks() == [a, b]
@@ -26,10 +26,10 @@ def test_scheduler_ctor():
 
 # basic, manual task scheduling
 def test_scheduler_schedule_task():
-    a = MetaTask("A", 1)
-    b = MetaTask("B", 5)
-    c = MetaTask("C", 3)
-    d = MetaTask("D", 3)
+    a = TaskFactory.create_meta_task("A", 1)
+    b = TaskFactory.create_meta_task("B", 5)
+    c = TaskFactory.create_meta_task("C", 3)
+    d = TaskFactory.create_meta_task("D", 3)
     s = Scheduler([a, b, c, d])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
@@ -48,9 +48,9 @@ def test_scheduler_schedule_task():
 
 # basic checking that all missing tasks are scheduled
 def test_scheduler_update_schedule():
-    a = MetaTask("A", 1)
-    b = MetaTask("B", 5)
-    c = MetaTask("C", 3)
+    a = TaskFactory.create_meta_task("A", 1)
+    b = TaskFactory.create_meta_task("B", 5)
+    c = TaskFactory.create_meta_task("C", 3)
     s = Scheduler([a, b, c])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
@@ -74,8 +74,8 @@ def test_scheduler_update_schedule():
 
 # check if all tasks' deadlines are decreasing
 def test_scheduler_advance_day():
-    a = MetaTask("A", 2)
-    b = MetaTask("B", 3)
+    a = TaskFactory.create_meta_task("A", 2)
+    b = TaskFactory.create_meta_task("B", 3)
     s = Scheduler([a, b])
     s.update_queue()
 
@@ -88,8 +88,8 @@ def test_scheduler_advance_day():
 
 # check if popping tasks from the queue works
 def test_scheduler_next_task():
-    a = MetaTask("A", 5)
-    b = MetaTask("B", 1)
+    a = TaskFactory.create_meta_task("A", 5)
+    b = TaskFactory.create_meta_task("B", 1)
     s = Scheduler([a, b])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
@@ -105,8 +105,8 @@ def test_scheduler_next_task():
 # check that tasks are not re-scheduled again if the time has not
 # advanced enough for the task to reappear
 def test_scheduler_periodic_scheduling():
-    a = MetaTask("A", 5)
-    b = MetaTask("B", 3)
+    a = TaskFactory.create_meta_task("A", 5)
+    b = TaskFactory.create_meta_task("B", 3)
     s = Scheduler([a, b])
     ta = TaskFactory.create_task_from_meta_task(a)
     tb = TaskFactory.create_task_from_meta_task(b)
