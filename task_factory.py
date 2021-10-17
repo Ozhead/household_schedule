@@ -16,7 +16,12 @@ class MissingProperty(Exception):
 
 class TaskFactory:
     @staticmethod
-    def create_meta_tasks(file: str) -> List[MetaTask]:
+    def create_meta_task(name: str, periodicity: int) -> MetaTask:
+        mt = MetaTask(name, periodicity)
+        return mt
+
+    @staticmethod
+    def create_meta_tasks_from_yml(file: str) -> List[MetaTask]:
         meta_tasks: List[MetaTask] = []
         with open(file) as f:
             data = yaml.load(f, Loader=yaml.FullLoader)
@@ -39,5 +44,5 @@ class TaskFactory:
     # end
 
     @staticmethod
-    def create_task(mt: MetaTask) -> Task:
+    def create_task_from_meta_task(mt: MetaTask) -> Task:
         return Task(mt)

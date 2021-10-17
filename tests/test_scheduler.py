@@ -31,10 +31,10 @@ def test_scheduler_schedule_task():
     c = MetaTask("C", 3)
     d = MetaTask("D", 3)
     s = Scheduler([a, b, c, d])
-    ta = TaskFactory.create_task(a)
-    tb = TaskFactory.create_task(b)
-    tc = TaskFactory.create_task(c)
-    td = TaskFactory.create_task(d)
+    ta = TaskFactory.create_task_from_meta_task(a)
+    tb = TaskFactory.create_task_from_meta_task(b)
+    tc = TaskFactory.create_task_from_meta_task(c)
+    td = TaskFactory.create_task_from_meta_task(d)
 
     s.schedule_task(a)
     assert s.get_queue() == [ta]
@@ -52,9 +52,9 @@ def test_scheduler_update_schedule():
     b = MetaTask("B", 5)
     c = MetaTask("C", 3)
     s = Scheduler([a, b, c])
-    ta = TaskFactory.create_task(a)
-    tb = TaskFactory.create_task(b)
-    tc = TaskFactory.create_task(c)
+    ta = TaskFactory.create_task_from_meta_task(a)
+    tb = TaskFactory.create_task_from_meta_task(b)
+    tc = TaskFactory.create_task_from_meta_task(c)
 
     # empty queue
     assert s.get_queue() == []
@@ -91,8 +91,8 @@ def test_scheduler_next_task():
     a = MetaTask("A", 5)
     b = MetaTask("B", 1)
     s = Scheduler([a, b])
-    ta = TaskFactory.create_task(a)
-    tb = TaskFactory.create_task(b)
+    ta = TaskFactory.create_task_from_meta_task(a)
+    tb = TaskFactory.create_task_from_meta_task(b)
 
     assert s.is_queue_empty() is True
     s.update_queue()
@@ -108,8 +108,8 @@ def test_scheduler_periodic_scheduling():
     a = MetaTask("A", 5)
     b = MetaTask("B", 3)
     s = Scheduler([a, b])
-    ta = TaskFactory.create_task(a)
-    tb = TaskFactory.create_task(b)
+    ta = TaskFactory.create_task_from_meta_task(a)
+    tb = TaskFactory.create_task_from_meta_task(b)
 
     s.update_queue()
     assert s.get_queue() == [tb, ta]

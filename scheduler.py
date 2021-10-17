@@ -73,7 +73,7 @@ class Scheduler:
             self.schedule_task(missing_mtask)
 
     def schedule_task(self, mt):
-        t = TaskFactory.create_task(mt)
+        t = TaskFactory.create_task_from_meta_task(mt)
 
         if t in self.get_queue():
             raise TaskAlreadyScheduledException(t)
