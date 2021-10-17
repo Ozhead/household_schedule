@@ -1,4 +1,5 @@
-from meta_task import MetaTask, ElementNotMetaTaskException, ElementNotMetaTaskListException
+from meta_task import MetaTask, ElementNotMetaTaskException
+from meta_task import ElementNotMetaTaskListException
 from scheduler import Scheduler
 from typing import List
 from task_factory import TaskFactory

@@ -8,7 +8,8 @@ class ElementNotMetaTaskException(Exception):
 
 class ElementNotMetaTaskListException(Exception):
     def __init__(self, elem):
-        self.message = "Element " + str(elem) + " is not of type List[MetaTask]."
+        self.message = ("Element " + str(elem) + 
+                        " is not of type List[MetaTask].")
 
     def __str__(self):
         return self.message
