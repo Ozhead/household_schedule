@@ -8,6 +8,14 @@ from task import Task
 g_telegram_handler = None
 
 
+class ProfileNotFoundException(Exception):
+    def __init__(self, id):
+        self.message = "There was no profile found for ID " + str(id) + "."
+
+    def __str__(self):
+        return self.message
+
+
 class TelegramHandler:
     def __init__(self):
         self._profiles: List[profile.Profile] = []
@@ -30,10 +38,33 @@ class TelegramHandler:
     def set_profiles(self, profiles: List[profile.Profile]):
         self._profiles: List[profile.Profile] = profiles
 
+    def _get_profile_by_id(self, id):
+        for pr in self._profiles:
+            if pr.get_user() == id:
+                return pr
+        else:
+            raise ProfileNotFoundException(id)
+
     def no_command(self, update, context):
-        text = "Sorry, I did not understand this command!"
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text=text)
+        msg = update.message.text.lower()
+        try:
+            if msg == "done":
+                pr = self._get_profile_by_id(update.effective_chat.id)
+                pr.on_msg_done()
+            elif msg == "no":
+                pr = self._get_profile_by_id(update.effective_chat.id)
+                pr.on_msg_no()
+            elif msg == "next":
+                pr = self._get_profile_by_id(update.effective_chat.id)
+                pr.on_msg_next()
+            else:
+                text = "Sorry, I did not understand this command!"
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text=text)
+        except ProfileNotFoundException:
+            text = "You don't have an active session. Please use /logon first."
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text=text)
 
     # executed by /logon <id>
     def logon(self, update, context):
@@ -91,6 +122,14 @@ class TelegramHandler:
                "If the day is over, the task will count as failed.")
         TelegramHandler.the().updater.bot.send_message(chat_id=pr.get_user(),
                                                        text=txt,
+                                                       parse_mode=(telegram.
+                                                                   ParseMode.
+                                                                   HTML))
+
+    @staticmethod
+    def send_msg(pr: profile.Profile, msg: str):
+        TelegramHandler.the().updater.bot.send_message(chat_id=pr.get_user(),
+                                                       text=msg,
                                                        parse_mode=(telegram.
                                                                    ParseMode.
                                                                    HTML))
