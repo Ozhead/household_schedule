@@ -27,7 +27,8 @@ class Main:
 
 
 def th_thread(omain):
-    th = TelegramHandler(omain.profiles)
+    th = TelegramHandler.the()
+    th.set_profiles(omain.profiles)
     th.run()
 
 
