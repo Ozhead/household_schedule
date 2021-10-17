@@ -8,8 +8,13 @@ else (no)
   :send user the respective task;
   :ask user if he did the task;
 
-  if (user did task?) then (yes)
+  if (user did task within the day?) then (yes)
+    note right 
+    if the user does not reply within the 
+    day it will count task not fulfilled
+    end note
     :remove task from queue/schedule;
+    :move time forward;
   else (no)
   
     if (debt-free mode?) then (yes)
@@ -21,6 +26,6 @@ else (no)
   endif
 
 endif
-
+:wait for the next day;
 stop
 @enduml
